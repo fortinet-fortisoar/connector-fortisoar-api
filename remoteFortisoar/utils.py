@@ -42,12 +42,12 @@ def invoke_rest_endpoint(config, endpoint, method='GET', data=None, headers=None
 def login(config):
     auth_type = config.get('auth_type')
     if auth_type == 'Basic':
-        return loginUsingBasicAuth(config)
+        return login_using_basic_auth(config)
     else:
-        return loginUsingHmacAuth(config)
+        return login_using_hmac_auth(config)
   
   
-def loginUsingHmacAuth(config, data=None):
+def login_using_hmac_auth(config, data=None):
     logger.info("Login using HMAC Auth")
     server_address = get_server_address(config)
     
@@ -68,7 +68,7 @@ def loginUsingHmacAuth(config, data=None):
     return None
 
 
-def loginUsingBasicAuth(config):
+def login_using_basic_auth(config):
     logger.info("Login using Basic Auth")
     server_address = get_server_address(config)
     
