@@ -3,10 +3,12 @@
     "version": "1.0.0",
     "label": "Remote FortiSOAR",
     "description": "This connector allows you to run REST API operations on other FortiSOAR environments",
-    "publisher": "",
+    "publisher": "Fortinet",
     "icon_small_name": "",
     "icon_large_name": "",
+    "cs_approved": false,
     "category": "",
+    "help_online": "",
     "configuration": {
         "fields": [
             {
@@ -140,6 +142,5 @@
             "open": false
         }
     ],
-    "forked_from": false,
-    "cs_approved": false
+    "forked_from": false
 }
