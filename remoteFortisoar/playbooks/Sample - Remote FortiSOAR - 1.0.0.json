@@ -1,0 +1,99 @@
+{
+  "type": "workflow_collections",
+  "data": [
+    {
+      "uuid": "c34830bf-149d-42bd-97c8-de42d77018fa",
+      "@type": "WorkflowCollection",
+      "name": "Sample - Remote FortiSOAR - 1.0.0",
+      "description": "This connector allows you to run REST API operations on other FortiSOAR environments",
+      "visible": true,
+      "image": null,
+      "recordTags": [
+        "Remotefortisoar",
+        "remoteFortisoar"
+      ],
+      "workflows": [
+        {
+          "@type": "Workflow",
+          "uuid": "ba7963b1-2519-43cc-aafb-174292feb759",
+          "collection": "/api/3/workflow_collections/c34830bf-149d-42bd-97c8-de42d77018fa",
+          "triggerLimit": null,
+          "description": "Makes an API call to the given endpoint with the given method.",
+          "name": "Make an API call",
+          "tag": "#Remote FortiSOAR",
+          "recordTags": [
+            "Remotefortisoar",
+            "remoteFortisoar"
+          ],
+          "isActive": false,
+          "debug": false,
+          "singleRecordExecution": false,
+          "parameters": [],
+          "synchronous": false,
+          "triggerStep": "/api/3/workflow_steps/3ae10132-f3bf-4d0f-ae05-b9233f3a3bcf",
+          "steps": [
+            {
+              "uuid": "3ae10132-f3bf-4d0f-ae05-b9233f3a3bcf",
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "route": "7934fcea-3f17-4039-a863-e3d282146952",
+                "title": "Remote FortiSOAR: Make an API call",
+                "resources": [
+                  "alerts"
+                ],
+                "inputVariables": [],
+                "step_variables": {
+                  "input": {
+                    "records": "{{vars.input.records[0]}}"
+                  }
+                },
+                "singleRecordExecution": false,
+                "noRecordExecution": true,
+                "executeButtonText": "Execute"
+              },
+              "left": "20",
+              "top": "20",
+              "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a"
+            },
+            {
+              "uuid": "248e5ae1-6b4a-46bc-a392-220039ad4efb",
+              "@type": "WorkflowStep",
+              "name": "Make an API call",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "name": "Remote FortiSOAR",
+                "config": "''",
+                "params": [],
+                "version": "1.0.0",
+                "connector": "remoteFortisoar",
+                "operation": "make_api_call",
+                "operationTitle": "Make an API call",
+                "step_variables": {
+                  "output_data": "{{vars.result}}"
+                }
+              },
+              "left": "188",
+              "top": "120",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671"
+            }
+          ],
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "uuid": "2781a909-860a-4cf1-bad2-296e25f77bbf",
+              "label": null,
+              "isExecuted": false,
+              "name": "Start-> Make an API call",
+              "sourceStep": "/api/3/workflow_steps/3ae10132-f3bf-4d0f-ae05-b9233f3a3bcf",
+              "targetStep": "/api/3/workflow_steps/248e5ae1-6b4a-46bc-a392-220039ad4efb"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
