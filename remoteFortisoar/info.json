@@ -6,8 +6,8 @@
     "publisher": "Fortinet",
     "icon_small_name": "fortisoar_remote_small.png",
     "icon_large_name": "fortisoar_remote_large.png",
-    "cs_approved": false,
-    "category": "",
+    "cs_approved": true,
+    "category": "Utilities",
     "help_online": "",
     "configuration": {
         "fields": [
@@ -52,32 +52,32 @@
                             "required": true,
                             "editable": true,
                             "visible": false,
-                            "type": "text",
+                            "type": "password",
                             "name": "password",
                             "value": ""
                         }
                     ],
                     "HMAC": [
                         {
-                            "description": "Private key used to authenticate FortiSOAR Server",
-                            "title": "Private Key",
-                            "tooltip": "Private key used authenticate FortiSOAR Server",
-                            "name": "private_key",
-                            "type": "textarea",
-                            "visible": true,
-                            "editable": true,
-                            "required": true,
-                            "value": ""
-                        },
-                        {
                             "description": "Public key used to authenticate FortiSOAR Server",
                             "title": "Public Key",
                             "tooltip": "Public key used to authenticate FortiSOAR Server",
                             "required": true,
                             "editable": true,
-                            "visible": false,
+                            "visible": true,
                             "type": "textarea",
                             "name": "public_key",
+                            "value": ""
+                        },
+                        {
+                            "description": "Private key used to authenticate FortiSOAR Server",
+                            "title": "Private Key",
+                            "tooltip": "Private key used authenticate FortiSOAR Server",
+                            "name": "private_key",
+                            "type": "password",
+                            "visible": true,
+                            "editable": true,
+                            "required": true,
                             "value": ""
                         }
                     ]
@@ -140,6 +140,5 @@
             ],
             "open": false
         }
-    ],
-    "forked_from": false
+    ]
 }
