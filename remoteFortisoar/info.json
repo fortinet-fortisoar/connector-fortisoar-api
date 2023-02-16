@@ -107,6 +107,14 @@
             "enabled": true,
             "parameters": [
                 {
+                    "title": "Endpoint IRI",
+                    "type": "text",
+                    "name": "iri",
+                    "required": true,
+                    "visible": true,
+                    "editable": true
+                },
+                {
                     "title": "HTTP method",
                     "name": "method",
                     "description": "Http method",
@@ -119,23 +127,113 @@
                         "POST",
                         "PUT",
                         "DELETE"
-                    ]
-                },
-                {
-                    "title": "Endpoint IRI",
-                    "type": "text",
-                    "name": "iri",
-                    "required": true,
-                    "visible": true,
-                    "editable": true
-                },
-                {
-                    "title": "Data",
-                    "type": "textarea",
-                    "name": "data",
-                    "required": false,
-                    "visible": true,
-                    "editable": true
+                    ],
+                    "onchange": {
+                        "GET":[
+                            {
+                                "title": "Query params",
+                                "name": "params",
+                                "description": "Any query params to send as part of the url",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "placeholder": "{'id':'1'}"
+                            },
+                            {
+                                "title": "Headers",
+                                "name": "headers",
+                                "description": "An dict full of headers to add to the request",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false
+                            }
+                        ],
+                        "POST":[
+                            {
+                                "title": "Query params",
+                                "name": "params",
+                                "description": "Any query params to send as part of the url",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "placeholder": "{'id':'1'}"
+                            },
+                            {
+                                "title": "Body",
+                                "name": "body",
+                                "description": "The body (which won't be encoded) to send with the request",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "tooltip": "Body for POST OR PUT methods"
+                            },
+                            {
+                                "title": "Headers",
+                                "name": "headers",
+                                "description": "An dict full of headers to add to the request",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false
+                            }
+                        ],
+                        "PUT":[
+                            {
+                                "title": "Query params",
+                                "name": "params",
+                                "description": "Any query params to send as part of the url",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "placeholder": "{'id':'1'}"
+                            },
+                            {
+                                "title": "Body",
+                                "name": "body",
+                                "description": "The body (which won't be encoded) to send with the request",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "tooltip": "Body for POST OR PUT methods"
+                            },
+                            {
+                                "title": "Headers",
+                                "name": "headers",
+                                "description": "An dict full of headers to add to the request",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false
+                            }
+                        ],
+                        "DELETE":[
+                            {
+                                "title": "Query params",
+                                "name": "params",
+                                "description": "Any query params to send as part of the url",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "placeholder": "{'id':'1'}"
+                            },
+                            {
+                                "title": "Headers",
+                                "name": "headers",
+                                "description": "An dict full of headers to add to the request",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false
+                            }
+                        ]
+                    }
                 }
             ],
             "open": false

@@ -7,54 +7,66 @@ from .constants import LOGGER_NAME
 logger = get_logger(LOGGER_NAME)
 
 
-def invoke_rest_endpoint(config, endpoint, method='GET', data=None, headers=None):
-    server_address = get_server_address(config)
-    full_uri = 'https://{server_address}{endpoint}'.format(server_address=server_address, endpoint=endpoint)
-    auth_type = config.get('auth_type')
-    verify_ssl = config.get('verify_ssl', True)
-    if headers is None:
-        headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
-
-    if method.lower() == "GET":
-        data = None
-
-    if (auth_type == 'Basic'):
-        token = login_using_basic_auth(config)
-        headers["Authorization"] = "Bearer " + token
-    elif (auth_type == 'HMAC'):
-        hmac_auth = generate_hmac(config, full_uri, method, json.dumps(data))
-    else:
-        logger.exception('Invalid authentication type: {0}'.format(auth_type))
-        raise ConnectorError('Invalid authentication type: {0}'.format(auth_type))
-    
-    try:
-        if (auth_type == 'Basic'):
-            response = requests.request(method, full_uri, verify=verify_ssl, json=data, headers=headers)
-        else:
-            if data:
-                response = requests.request(method, full_uri, auth=hmac_auth, verify=verify_ssl, headers=headers, json=data)
-            else:
-                response = requests.request(method, full_uri, auth=hmac_auth, verify=verify_ssl, headers=headers)
-    except Exception as e:
-        logger.exception('Error invoking endpoint: {0}'.format(full_uri))
-        raise ConnectorError('Error: {0}'.format(str(e)))
-    return maybe_json_or_raise(response)
-
-
 def login(config):
     auth_type = config.get('auth_type')
     if auth_type == 'Basic':
-        return login_using_basic_auth(config)
+        return _login_using_basic_auth(config)
     else:
-        return login_using_hmac_auth(config)
+        return _login_using_hmac_auth(config)
+    
+def invoke_rest_endpoint(config, endpoint, method='GET', headers=None, body=None, params=None):
+    server_address = _get_server_address(config)
+    url = 'https://{server_address}{endpoint}'.format(server_address=server_address, endpoint=endpoint)
+    
+    auth_type = config.get('auth_type')
+    verify_ssl = config.get('verify_ssl', True)
+    auth = None
 
-      
-def login_using_basic_auth(config):
-    server_address = get_server_address(config)
+    if len(headers) == 0:
+        headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
+
+    if (auth_type == 'Basic'):
+        token = _login_using_basic_auth(config, headers)
+        headers["Authorization"] = "Bearer " + token.get('token')
+        return _api_call(url, method, params, body, headers, verify_ssl, auth)
+    elif (auth_type == 'HMAC'):
+        if body:
+            logger.info("_generate_hmac: body is present")
+            auth = _generate_hmac(config, url, method, _convert_payload(body))
+            return _api_call(url, method, params, body, headers, verify_ssl, auth)
+        elif params:
+            # query params are specified
+            logger.info("_generate_hmac: params is present")
+            auth = _generate_hmac(config, url, method, _convert_payload(params))
+            return _api_call(url=url, method=method, body=params, headers=headers, verify=verify_ssl, auth=auth)
+        else:
+            logger.exception('Invalid payload for auth type: {0}'.format(auth_type))
+            raise ConnectorError('Invalid payload for auth type: {0}'.format(auth_type))
+    else:
+        logger.exception('Invalid authentication type: {0}'.format(auth_type))
+        raise ConnectorError('Invalid authentication type: {0}'.format(auth_type))
+
+def _convert_payload(payload):
+    if payload and type(payload) == str:
+        try:
+            logger.debug('Converting payload into json: %s', payload)
+            body = json.loads(payload, strict=False)
+        except:
+            logger.warn('Json conversion failed.')
+
+    if payload and type(payload) != str:
+        payload = json.dumps(payload)
+    return payload
+   
+def _login_using_basic_auth(config, headers=None):
+    server_address = _get_server_address(config)
     username = config.get('username')
     password = config.get('password')
     verify_ssl = config.get('verify_ssl', True)
-    headers = {'Content-Type': 'application/json'}
+
+    if headers is None:
+        headers = {'Content-Type': 'application/json'}
+    
     if not server_address or not username or not password:
         raise ConnectorError('Missing required parameters')
     
@@ -65,63 +77,70 @@ def login_using_basic_auth(config):
             "password": password
         }
     }
+    return _api_call(url=auth_url, method='POST', body=auth_payload, headers=headers, verify=verify_ssl)
 
-    try:
-        response = requests.request('POST', auth_url, verify=verify_ssl, json=auth_payload, headers=headers)
-    except Exception as e:
-        logger.exception('Error invoking endpoint: {0}'.format(auth_url))
-        raise ConnectorError('Error: {0}'.format(str(e)))
-    if response.ok:
-        data = response.json()
-        return data.get('token')
-    else:
-        logger.error(response.content)
-        raise ConnectorError(response.content)
-
-
-def login_using_hmac_auth(config, payload=None):
-    server_address = get_server_address(config)
+def _login_using_hmac_auth(config, payload=None):
+    server_address = _get_server_address(config)
     verify_ssl = config.get('verify_ssl', True)
+    method = "GET"
     
-    # Full URI to authenticate HMAC and connection to the remote FortiSOAR
-    full_uri = 'https://{server_address}/api/auth/license/?param=license_details'.format(server_address=server_address)
-    try:
-        hmac_auth = generate_hmac(config, full_uri, 'GET', payload)
-        response = requests.request('GET', full_uri, auth=hmac_auth, verify=verify_ssl, json=payload)
-    except Exception as e:
-        logger.exception('Error invoking endpoint: {0}'.format(full_uri))
-        raise ConnectorError('Error: {0}'.format(str(e)))
-    
-    if response.ok:
-        return response.json()
-    else:
-        logger.error("HMAC authentication failed")
-        raise ConnectorError("HMAC authentication failed")
+    # Full URL to authenticate HMAC and connection to the remote FortiSOAR
+    auth_url = 'https://{server_address}/api/auth/license/?param=license_details'.format(server_address=server_address)
+   
+    hmac_auth = _generate_hmac(config, auth_url, method, payload)
+    return _api_call(url=auth_url, auth=hmac_auth, verify=verify_ssl)
 
-
-def generate_hmac(config, full_uri, method, payload):
-    public_key = format_keys(config.get('public_key').strip())
-    private_key = format_keys(config.get('private_key').strip())
+def _generate_hmac(config, url, method, payload=None):
+    public_key = _format_keys(config.get('public_key').strip())
+    private_key = _format_keys(config.get('private_key').strip())
     
     if method == 'GET':
         payload = public_key
-    return HmacAuth(full_uri, method, public_key, private_key, payload)
+    return HmacAuth(url, method, public_key, private_key, payload)
 
+def _api_call(url, method='GET', params='', body='', headers=None,
+              verify=True, auth=None,
+              *args, **kwargs):
 
-def format_keys(input_key):
+    # build **args for requests call
+    request_args = {
+        'verify': verify,
+    }
+
+    if auth:
+        request_args['auth'] = auth
+    if params:
+        request_args['params'] = params
+    if headers:
+        request_args['headers'] = headers
+
+    # get rid of the body on GET/HEAD requests
+    bodyless_methods = ['head', 'get']
+    if method.lower() not in bodyless_methods:
+        request_args['data'] = _convert_payload(body)
+
+    # actual requests call
+    logger.info('Starting request: Method: %s, Url: %s', method, url)
+    try:
+        response = requests.request(method, url, **request_args)
+    except requests.exceptions.SSLError as e:
+        logger.exception("ERROR :: {0}".format(str(e)))
+        raise ConnectorError("ERROR :: {0}".format(str(e)))
+    return _maybe_json_or_raise(response)
+
+def _format_keys(input_key):
     content = input_key.split('-----')
     content[2] = content[2].replace(' ', '\n')
     input_key = '-----'.join(content)
     return input_key
 
-
-def get_server_address (config):
+def _get_server_address (config):
     server_address = config.get('url').replace('https://', '').replace('http://', '')
     if server_address.endswith('/'):
         server_address = server_address[:-1]    
     return server_address
 
-def maybe_json_or_raise(response):
+def _maybe_json_or_raise(response):
     """
     Helper function for processing request responses
 
@@ -153,14 +172,13 @@ def maybe_json_or_raise(response):
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
             # add any response content to the error message
-            error_msg = getErrorMessage(msg)
+            error_msg = _getErrorMessage(msg)
             if not error_msg:
                 error_msg = '{} :: {}'.format(str(e), msg)
             logger.error(error_msg)
             raise requests.exceptions.HTTPError(error_msg, response=response)
 
-
-def getErrorMessage(msg):
+def _getErrorMessage(msg):
     if type(msg) == dict:
         error_message = msg.get('hydra:description',False)
         if error_message:

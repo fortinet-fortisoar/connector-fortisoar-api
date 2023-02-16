@@ -7,12 +7,14 @@ logger = get_logger(LOGGER_NAME)
 
 def make_api_call(config, params, *args, **kwargs):
     endpoint = params.get('iri')
-    data = params.get('data', None)
     method = params.get('method')
+    headers = params.get('headers', None)
+    body = params.get('body', None)
+    param = params.get('params', None)
     if not endpoint or not method:
-        logger.warning('Got endpoint: {endpoint}\nData: {data}'.format(endpoint=endpoint, data=json.dumps(data)))
+        logger.warning('Got an endpoint: {endpoint}\Body: {body}'.format(endpoint=endpoint, body=json.dumps(body)))
         raise ConnectorError('Missing required input')
 
-    api_response = invoke_rest_endpoint(config, endpoint, method, data)
+    api_response = invoke_rest_endpoint(config, endpoint, method, headers, body, param)
     return api_response
 
