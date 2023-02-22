@@ -1,5 +1,7 @@
 import requests
 import json
+from urllib.parse import urlencode
+import urllib.parse as urlparse
 from cshmac.requests import HmacAuth
 from connectors.core.connector import get_logger, ConnectorError
 from .constants import LOGGER_NAME
@@ -19,44 +21,34 @@ def invoke_rest_endpoint(config, endpoint, method='GET', headers=None, body=None
     url = 'https://{server_address}{endpoint}'.format(server_address=server_address, endpoint=endpoint)
     
     auth_type = config.get('auth_type')
-    verify_ssl = config.get('verify_ssl', True)
+    verify_ssl = config.get('verify_ssl', False)
     auth = None
 
     if len(headers) == 0:
         headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
 
+    # Manupulate query pramas, url encode them and make it a part of an url
+    if params:
+        url_parts = list(urlparse.urlparse(url))
+        query_param = dict(urlparse.parse_qsl(url_parts[4]))
+        query_param.update(params)
+        url_parts[4] = urlencode(query_param)
+        url = urlparse.urlunparse(url_parts)
+
     if (auth_type == 'Basic'):
         token = _login_using_basic_auth(config, headers)
         headers["Authorization"] = "Bearer " + token.get('token')
-        return _api_call(url, method, params, body, headers, verify_ssl, auth)
+        return _make_request(url=url, method=method, 
+                             body=body, headers=headers, 
+                             verify=verify_ssl, auth=auth)
     elif (auth_type == 'HMAC'):
-        if body:
-            logger.info("_generate_hmac: body is present")
-            auth = _generate_hmac(config, url, method, _convert_payload(body))
-            return _api_call(url, method, params, body, headers, verify_ssl, auth)
-        elif params:
-            # query params are specified
-            logger.info("_generate_hmac: params is present")
-            auth = _generate_hmac(config, url, method, _convert_payload(params))
-            return _api_call(url=url, method=method, body=params, headers=headers, verify=verify_ssl, auth=auth)
-        else:
-            logger.exception('Invalid payload for auth type: {0}'.format(auth_type))
-            raise ConnectorError('Invalid payload for auth type: {0}'.format(auth_type))
+        auth = _generate_hmac(config, url, method, body)
+        return _make_request(url=url, method=method, 
+                             body=body, headers=headers, 
+                             verify=verify_ssl, auth=auth)
     else:
         logger.exception('Invalid authentication type: {0}'.format(auth_type))
         raise ConnectorError('Invalid authentication type: {0}'.format(auth_type))
-
-def _convert_payload(payload):
-    if payload and type(payload) == str:
-        try:
-            logger.debug('Converting payload into json: %s', payload)
-            body = json.loads(payload, strict=False)
-        except:
-            logger.warn('Json conversion failed.')
-
-    if payload and type(payload) != str:
-        payload = json.dumps(payload)
-    return payload
    
 def _login_using_basic_auth(config, headers=None):
     server_address = _get_server_address(config)
@@ -77,52 +69,47 @@ def _login_using_basic_auth(config, headers=None):
             "password": password
         }
     }
-    return _api_call(url=auth_url, method='POST', body=auth_payload, headers=headers, verify=verify_ssl)
+    return _make_request(url=auth_url, method='POST', body=auth_payload, headers=headers, verify=verify_ssl)
 
-def _login_using_hmac_auth(config, payload=None):
+def _login_using_hmac_auth(config, body=''):
     server_address = _get_server_address(config)
     verify_ssl = config.get('verify_ssl', True)
-    method = "GET"
-    
-    # Full URL to authenticate HMAC and connection to the remote FortiSOAR
-    auth_url = 'https://{server_address}/api/auth/license/?param=license_details'.format(server_address=server_address)
-   
-    hmac_auth = _generate_hmac(config, auth_url, method, payload)
-    return _api_call(url=auth_url, auth=hmac_auth, verify=verify_ssl)
 
-def _generate_hmac(config, url, method, payload=None):
+    # Full URL to authenticate HMAC and remote FortiSOAR connection
+    auth_url = 'https://{server_address}/api/auth/license/?param=license_details'.format(server_address=server_address)
+    hmac_auth = _generate_hmac(config, auth_url, "GET", body)
+    return _make_request(url=auth_url, auth=hmac_auth, verify=verify_ssl)
+
+def _generate_hmac(config, url, method, body=''):
     public_key = _format_keys(config.get('public_key').strip())
     private_key = _format_keys(config.get('private_key').strip())
     
-    if method == 'GET':
-        payload = public_key
-    return HmacAuth(url, method, public_key, private_key, payload)
+    bodyless_methods = ['head', 'get']
+    if method.lower() in bodyless_methods:
+        body = public_key
+    return HmacAuth(url, method, public_key, private_key, json.dumps(body))
 
-def _api_call(url, method='GET', params='', body='', headers=None,
-              verify=True, auth=None,
-              *args, **kwargs):
+def _make_request(url, method='GET', params=None, body=None, headers=None,
+              verify=False, auth=None):
 
-    # build **args for requests call
+    # Build **request_args for requests call
     request_args = {
         'verify': verify,
     }
 
-    if auth:
-        request_args['auth'] = auth
     if params:
         request_args['params'] = params
     if headers:
         request_args['headers'] = headers
 
-    # get rid of the body on GET/HEAD requests
     bodyless_methods = ['head', 'get']
     if method.lower() not in bodyless_methods:
-        request_args['data'] = _convert_payload(body)
+        request_args['json'] = body
 
-    # actual requests call
-    logger.info('Starting request: Method: %s, Url: %s', method, url)
+    # Actual requests call
+    logger.info('Starting request: Method: %s, Url: %s, req_args: %s', method, url, str(request_args))
     try:
-        response = requests.request(method, url, **request_args)
+        response = requests.request(method, url, auth=auth, **request_args)
     except requests.exceptions.SSLError as e:
         logger.exception("ERROR :: {0}".format(str(e)))
         raise ConnectorError("ERROR :: {0}".format(str(e)))

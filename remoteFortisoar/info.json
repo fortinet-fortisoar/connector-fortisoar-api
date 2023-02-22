@@ -51,7 +51,7 @@
                             "tooltip": "Password used to authenticate FortiSOAR Server",
                             "required": true,
                             "editable": true,
-                            "visible": false,
+                            "visible": true,
                             "type": "password",
                             "name": "password",
                             "value": ""
