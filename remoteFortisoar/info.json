@@ -147,7 +147,8 @@
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
-                                "required": false
+                                "required": false,
+                                "value": "{\"accept\": \"application/json\"}"
                             }
                         ],
                         "POST":[
@@ -165,7 +166,7 @@
                                 "title": "Body",
                                 "name": "body",
                                 "description": "The body (which won't be encoded) to send with the request",
-                                "type": "text",
+                                "type": "textarea",
                                 "visible": true,
                                 "editable": true,
                                 "required": false,
@@ -178,7 +179,8 @@
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
-                                "required": false
+                                "required": false,
+                                "value": "{\"accept\": \"application/json\"}"
                             }
                         ],
                         "PUT":[
@@ -209,7 +211,8 @@
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
-                                "required": false
+                                "required": false,
+                                "value": "{\"accept\": \"application/json\"}"
                             }
                         ],
                         "DELETE":[
@@ -230,7 +233,8 @@
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
-                                "required": false
+                                "required": false,
+                                "value": "{\"accept\": \"application/json\"}"
                             }
                         ]
                     }

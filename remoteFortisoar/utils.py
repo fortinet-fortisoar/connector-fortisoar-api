@@ -107,7 +107,7 @@ def _make_request(url, method='GET', params=None, body=None, headers=None,
         request_args['json'] = body
 
     # Actual requests call
-    logger.info('Starting request: Method: %s, Url: %s, req_args: %s', method, url, str(request_args))
+    logger.info('Starting request: Method: %s, Url: %s', method, url)
     try:
         response = requests.request(method, url, auth=auth, **request_args)
     except requests.exceptions.SSLError as e:
