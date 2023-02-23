@@ -1,0 +1,246 @@
+{
+    "name": "remoteFortisoar",
+    "version": "1.0.0",
+    "label": "Remote FortiSOAR",
+    "description": "This connector allows you to run REST API operations on other FortiSOAR environments",
+    "publisher": "Fortinet",
+    "icon_small_name": "fortisoar_remote_small.png",
+    "icon_large_name": "fortisoar_remote_large.png",
+    "cs_approved": true,
+    "category": "Utilities",
+    "help_online": "",
+    "configuration": {
+        "fields": [
+            {
+                "title": "FortiSOAR Endpoint URL",
+                "type": "text",
+                "name": "url",
+                "required": true,
+                "visible": true,
+                "editable": true
+            },
+            {
+                "title": "Authentication Type",
+                "name": "auth_type",
+                "required": true,
+                "editable": true,
+                "visible": true,
+                "type": "select",
+                "options": [
+                    "Basic",
+                    "HMAC"
+                ],
+                "value": "Basic",
+                "description": "Authentication that will be used to connect and communicate with the FortiSOAR server. Choose either Basic or HMAC. By default, this is set to Basic.",
+                "onchange": {
+                    "Basic": [
+                        {
+                            "description": "User name used to authenticate FortiSOAR Server",
+                            "title": "User Name",
+                            "tooltip": "User name used authenticate FortiSOAR Server",
+                            "name": "username",
+                            "type": "text",
+                            "visible": true,
+                            "editable": true,
+                            "required": true,
+                            "value": ""
+                        },
+                        {
+                            "description": "Password used to authenticate FortiSOAR Server",
+                            "title": "Password",
+                            "tooltip": "Password used to authenticate FortiSOAR Server",
+                            "required": true,
+                            "editable": true,
+                            "visible": true,
+                            "type": "password",
+                            "name": "password",
+                            "value": ""
+                        }
+                    ],
+                    "HMAC": [
+                        {
+                            "description": "Public key used to authenticate FortiSOAR Server",
+                            "title": "Public Key",
+                            "tooltip": "Public key used to authenticate FortiSOAR Server",
+                            "required": true,
+                            "editable": true,
+                            "visible": true,
+                            "type": "textarea",
+                            "name": "public_key",
+                            "value": ""
+                        },
+                        {
+                            "description": "Private key used to authenticate FortiSOAR Server",
+                            "title": "Private Key",
+                            "tooltip": "Private key used authenticate FortiSOAR Server",
+                            "name": "private_key",
+                            "type": "password",
+                            "visible": true,
+                            "editable": true,
+                            "required": true,
+                            "value": ""
+                        }
+                    ]
+                }
+            },
+            {
+                "title": "Verify SSL",
+                "type": "checkbox",
+                "name": "verify_ssl",
+                "required": false,
+                "visible": true,
+                "editable": true
+            }
+        ]
+    },
+    "operations": [
+        {
+            "operation": "make_api_call",
+            "title": "Make an API call",
+            "description": "Makes an API call to the given endpoint with the given method.",
+            "category": "",
+            "annotation": "",
+            "output_schema": {
+                "result": "",
+                "api_data": ""
+            },
+            "enabled": true,
+            "parameters": [
+                {
+                    "title": "Endpoint IRI",
+                    "type": "text",
+                    "name": "iri",
+                    "required": true,
+                    "visible": true,
+                    "editable": true
+                },
+                {
+                    "title": "HTTP method",
+                    "name": "method",
+                    "description": "Http method",
+                    "type": "select",
+                    "visible": true,
+                    "editable": true,
+                    "required": true,
+                    "options": [
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "DELETE"
+                    ],
+                    "onchange": {
+                        "GET":[
+                            {
+                                "title": "Query params",
+                                "name": "params",
+                                "description": "Any query params to send as part of the url",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "placeholder": "{'id':'1'}"
+                            },
+                            {
+                                "title": "Headers",
+                                "name": "headers",
+                                "description": "An dict full of headers to add to the request",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "value": "{\"accept\": \"application/json\"}"
+                            }
+                        ],
+                        "POST":[
+                            {
+                                "title": "Query params",
+                                "name": "params",
+                                "description": "Any query params to send as part of the url",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "placeholder": "{'id':'1'}"
+                            },
+                            {
+                                "title": "Body",
+                                "name": "body",
+                                "description": "The body (which won't be encoded) to send with the request",
+                                "type": "textarea",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "tooltip": "Body for POST OR PUT methods"
+                            },
+                            {
+                                "title": "Headers",
+                                "name": "headers",
+                                "description": "An dict full of headers to add to the request",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "value": "{\"accept\": \"application/json\"}"
+                            }
+                        ],
+                        "PUT":[
+                            {
+                                "title": "Query params",
+                                "name": "params",
+                                "description": "Any query params to send as part of the url",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "placeholder": "{'id':'1'}"
+                            },
+                            {
+                                "title": "Body",
+                                "name": "body",
+                                "description": "The body (which won't be encoded) to send with the request",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "tooltip": "Body for POST OR PUT methods"
+                            },
+                            {
+                                "title": "Headers",
+                                "name": "headers",
+                                "description": "An dict full of headers to add to the request",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "value": "{\"accept\": \"application/json\"}"
+                            }
+                        ],
+                        "DELETE":[
+                            {
+                                "title": "Query params",
+                                "name": "params",
+                                "description": "Any query params to send as part of the url",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "placeholder": "{'id':'1'}"
+                            },
+                            {
+                                "title": "Headers",
+                                "name": "headers",
+                                "description": "An dict full of headers to add to the request",
+                                "type": "text",
+                                "visible": true,
+                                "editable": true,
+                                "required": false,
+                                "value": "{\"accept\": \"application/json\"}"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "open": false
+        }
+    ]
+}

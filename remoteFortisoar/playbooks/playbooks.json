@@ -1,0 +1,145 @@
+{
+  "type": "workflow_collections",
+  "data": [
+    {
+      "uuid": "c34830bf-149d-42bd-97c8-de42d77018fa",
+      "@type": "WorkflowCollection",
+      "name": "Sample - Remote FortiSOAR - 1.0.0",
+      "description": "This connector allows you to run REST API operations on other FortiSOAR environments",
+      "visible": true,
+      "image": null,
+      "recordTags": [
+        "Remotefortisoar"
+      ],
+      "workflows": [
+        {
+          "@type": "Workflow",
+          "triggerLimit": null,
+          "name": "Make an API call",
+          "aliasName": null,
+          "tag": "#Remote FortiSOAR",
+          "description": "Makes an API call to the given endpoint with the given method.",
+          "isActive": false,
+          "debug": false,
+          "singleRecordExecution": false,
+          "remoteExecutableFlag": false,
+          "parameters": [],
+          "synchronous": false,
+          "lastModifyDate": 1677137426,
+          "collection": "/api/3/workflow_collections/4dc865c8-012e-4326-8be5-252b723ea734",
+          "versions": [],
+          "triggerStep": "/api/3/workflow_steps/067ae8b6-aa32-4659-87ca-d3cb210e0682",
+          "steps": [
+            {
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "arguments": {
+                "route": "120347c0-ea98-4437-9337-625d0d5f44ed",
+                "title": "Remote FortiSOAR: Make an API call",
+                "resources": [
+                  "alerts"
+                ],
+                "inputVariables": [],
+                "step_variables": {
+                  "input": {
+                    "records": "{{vars.input.records[0]}}"
+                  }
+                },
+                "executeButtonText": "Execute",
+                "noRecordExecution": true,
+                "singleRecordExecution": false
+              },
+              "status": null,
+              "top": "30",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
+              "group": null,
+              "uuid": "067ae8b6-aa32-4659-87ca-d3cb210e0682"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Configuration",
+              "description": null,
+              "arguments": {
+                "end_time": "{{arrow.utcnow().shift(hours=-24).format(\"YYYY-MM-DD HH:mm:ss ZZ\")}}",
+                "start_time": "{{arrow.utcnow().format(\"YYYY-MM-DD HH:mm:ss ZZ\")}}"
+              },
+              "status": null,
+              "top": "165",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+              "group": null,
+              "uuid": "2c1edf59-f39d-4c67-83fd-fd9f9eb4bbb7"
+            },
+            {
+              "@type": "WorkflowStep",
+              "name": "Make an API call",
+              "description": null,
+              "arguments": {
+                "name": "Remote FortiSOAR",
+                "config": "d878d7ee-eb1f-4f4d-a86d-c4c267cef8bb",
+                "params": {
+                  "iri": "/api/query/alerts",
+                  "body": "{\"sort\":[{\"field\":\"priorityWeight\",\"direction\":\"DESC\",\"_fieldName\":\"priorityWeight\"}],\"limit\":30,\"logic\":\"AND\",\"filters\":[{\"logic\":\"AND\",\"filters\":[{\"field\":\"createDate\",\"operator\":\"gte\",\"value\":\"{{vars.end_time}}\",\"type\":\"datetime\"},{\"field\":\"createDate\",\"operator\":\"lte\",\"value\":\"{{vars.start_time}}\",\"type\":\"datetime\"}],\"_field\":\"createDate\",\"_value\":{\"differenceType\":\"hours\",\"differenceValue\":-24},\"_operator\":\"date\",\"type\":\"datetime\"},{\"field\":\"severity\",\"value\":[\"/api/3/picklists/40187287-89fc-4e9c-b717-e9443d57eedb\"],\"display\":\"\",\"operator\":\"in\",\"type\":\"array\",\"OPERATOR_KEY\":\"$\"},{\"sort\":[{\"direction\":\"DESC\",\"field\":\"priorityWeight\",\"_fieldTitle\":\"Priority Weight\",\"_fieldName\":\"priorityWeight\"}],\"limit\":30,\"logic\":\"AND\",\"filters\":[]}],\"__selectFields\":[\"id\",\"priorityWeight\",\"severity\",\"assignedTo\",\"name\",\"source\",\"type\",\"status\",\"createDate\",\"escalatedtoincident\",\"ackSlaStatus\",\"respSlaStatus\",\"@id\",\"@type\",\"createUser\",\"modifyUser\"]}",
+                  "file": "",
+                  "method": "POST",
+                  "params": "",
+                  "headers": "{\"accept\": \"application/json\"}"
+                },
+                "version": "1.0.0",
+                "connector": "remoteFortisoar",
+                "operation": "make_api_call",
+                "operationTitle": "Make an API call",
+                "step_variables": {
+                  "output_data": "{{vars.result}}"
+                }
+              },
+              "status": null,
+              "top": "300",
+              "left": "125",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671",
+              "group": null,
+              "uuid": "94f5967a-9024-46df-a1b9-2b7573ce2090"
+            }
+          ],
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "name": "Start -> Configuration",
+              "targetStep": "/api/3/workflow_steps/2c1edf59-f39d-4c67-83fd-fd9f9eb4bbb7",
+              "sourceStep": "/api/3/workflow_steps/067ae8b6-aa32-4659-87ca-d3cb210e0682",
+              "label": null,
+              "isExecuted": false,
+              "uuid": "f5bcf25c-1e6e-4a4f-b97c-db6fef22c157"
+            },
+            {
+              "@type": "WorkflowRoute",
+              "name": "Configuration -> Make an API call",
+              "targetStep": "/api/3/workflow_steps/94f5967a-9024-46df-a1b9-2b7573ce2090",
+              "sourceStep": "/api/3/workflow_steps/2c1edf59-f39d-4c67-83fd-fd9f9eb4bbb7",
+              "label": null,
+              "isExecuted": false,
+              "uuid": "c6ace14e-58a4-4b3b-9444-753fd50171ef"
+            }
+          ],
+          "groups": [],
+          "priority": null,
+          "uuid": "3453d376-092f-4455-984e-ce0fbf13baba",
+          "id": 1272,
+          "createUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
+          "createDate": 1677133838.747974,
+          "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
+          "modifyDate": 1677137426.54012,
+          "owners": [],
+          "isPrivate": false,
+          "deletedAt": null,
+          "importedBy": [],
+          "recordTags": [
+            "Remotefortisoar"
+          ]
+        }
+      ]
+    }
+  ]
+}
