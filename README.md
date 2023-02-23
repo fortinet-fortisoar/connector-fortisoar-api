@@ -1,1 +1,1 @@
-# connector-fortisoar-api
+# connector-remote-fortisoar
