@@ -1,5 +1,6 @@
 import requests
 import json
+import os
 from urllib.parse import urlencode
 import urllib.parse as urlparse
 from cshmac.requests import HmacAuth
@@ -7,7 +8,7 @@ from connectors.core.connector import get_logger, ConnectorError
 from .constants import LOGGER_NAME
 
 logger = get_logger(LOGGER_NAME)
-
+TMP_FILE_ROOT =  '/tmp/'
 
 def login(config):
     auth_type = config.get('auth_type')
@@ -16,12 +17,13 @@ def login(config):
     else:
         return _login_using_hmac_auth(config)
     
-def invoke_rest_endpoint(config, endpoint, method='GET', headers=None, body=None, params=None):
+def invoke_rest_endpoint(config, endpoint, method='GET', headers=None, body=None, params=None, file=None):
     server_address = _get_server_address(config)
     url = 'https://{server_address}{endpoint}'.format(server_address=server_address, endpoint=endpoint)
     
     auth_type = config.get('auth_type')
     verify_ssl = config.get('verify_ssl', False)
+    logger.info("File to upload: " + str(file))
     auth = None
 
     if len(headers) == 0:
@@ -34,6 +36,9 @@ def invoke_rest_endpoint(config, endpoint, method='GET', headers=None, body=None
         query_param.update(params)
         url_parts[4] = urlencode(query_param)
         url = urlparse.urlunparse(url_parts)
+
+    if file:
+        _get_file_object(config, headers, file)
 
     if (auth_type == 'Basic'):
         token = _login_using_basic_auth(config, headers)
@@ -49,7 +54,46 @@ def invoke_rest_endpoint(config, endpoint, method='GET', headers=None, body=None
     else:
         logger.exception('Invalid authentication type: {0}'.format(auth_type))
         raise ConnectorError('Invalid authentication type: {0}'.format(auth_type))
-   
+
+def _get_file_object(config, headers=None, file=None):
+     # Remote file operation
+    if file:
+        logger.info("Inside Remote File operation: " + str(file))
+        auth_type = config.get('auth_type')
+        verify_ssl = config.get('verify_ssl', False)
+        files_headers = {'Content-Type': 'application/octet-stream'}
+        server_address = _get_server_address(config)
+        files_endpoint= "/api/3/files/"
+        files_endpoint = file.get("@id")
+        files_url = 'https://{server_address}{endpoint}'.format(server_address=server_address, endpoint=files_endpoint)
+        
+        if (auth_type == 'Basic'):
+            token = _login_using_basic_auth(config, headers)
+            files_headers["Authorization"] = "Bearer " + token.get('token')
+            file_data = _make_request(url=files_url, method='GET', headers=files_headers)
+        elif (auth_type == 'HMAC'):
+            auth = _generate_hmac(config, files_url, method='GET', body=None)
+            file_data = _make_request(url=files_url, method='GET', auth=auth, headers=files_headers)
+        else:
+            logger.exception('Invalid authentication type: {0}'.format(auth_type))
+            raise ConnectorError('Invalid authentication type: {0}'.format(auth_type))
+        
+        if file_data:
+            logger.info("file_data: " + str(file_data))
+            return file_data
+
+        # first upload the file and get the @id back
+        # request_headers = {'Content-Type': 'application/octet-stream'}
+        # logger.info("request header: " + str(request_headers))
+        
+        # abs_filename = os.path.join(TMP_FILE_ROOT, file.get("filename"))
+        # logger.info("abs_filename: " + str(abs_filename))
+        # file_obj = open(abs_filename, 'rb')
+        # logger.info("file_obj: " + str(file_obj))
+
+        #file_data = _make_request(url=file_upload_url, method='POST', headers=headers)
+        #file_data = get_fileiri_data(file_url, headers)
+
 def _login_using_basic_auth(config, headers=None):
     server_address = _get_server_address(config)
     username = config.get('username')

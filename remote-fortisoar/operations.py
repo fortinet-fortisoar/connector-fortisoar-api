@@ -11,10 +11,11 @@ def make_api_call(config, params, *args, **kwargs):
     headers = params.get('headers', None)
     body = params.get('body', None)
     param = params.get('params', None)
+    file = params.get('file', None)
     if not endpoint or not method:
         logger.warning('Got an endpoint: {endpoint}\Body: {body}'.format(endpoint=endpoint, body=json.dumps(body)))
         raise ConnectorError('Missing required input')
 
-    api_response = invoke_rest_endpoint(config, endpoint, method, headers, body, param)
+    api_response = invoke_rest_endpoint(config, endpoint, method, headers, body, param, file)
     return api_response
 
