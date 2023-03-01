@@ -23,6 +23,8 @@
             {
                 "title": "Authentication Type",
                 "name": "auth_type",
+                "description": "Authentication that will be used to connect and communicate with the FortiSOAR server. Choose either Basic or HMAC. By default, this is set to Basic.",
+                "tooltip": "Authentication that will be used to connect and communicate with the FortiSOAR server. Choose either Basic or HMAC. By default, this is set to Basic.",
                 "required": true,
                 "editable": true,
                 "visible": true,
@@ -32,13 +34,12 @@
                     "HMAC"
                 ],
                 "value": "Basic",
-                "description": "Authentication that will be used to connect and communicate with the FortiSOAR server. Choose either Basic or HMAC. By default, this is set to Basic.",
                 "onchange": {
                     "Basic": [
                         {
-                            "description": "User name used to authenticate FortiSOAR Server",
                             "title": "User Name",
-                            "tooltip": "User name used authenticate FortiSOAR Server",
+                            "description": "User name used to authenticate Remote FortiSOAR Server",
+                            "tooltip": "User name used to authenticate Remote FortiSOAR Server",
                             "name": "username",
                             "type": "text",
                             "visible": true,
@@ -47,8 +48,8 @@
                             "value": ""
                         },
                         {
-                            "description": "Password used to authenticate FortiSOAR Server",
                             "title": "Password",
+                            "description": "Password used to authenticate FortiSOAR Server",
                             "tooltip": "Password used to authenticate FortiSOAR Server",
                             "required": true,
                             "editable": true,
@@ -60,8 +61,8 @@
                     ],
                     "HMAC": [
                         {
-                            "description": "Public key used to authenticate FortiSOAR Server",
                             "title": "Public Key",
+                            "description": "Public key used to authenticate FortiSOAR Server",
                             "tooltip": "Public key used to authenticate FortiSOAR Server",
                             "required": true,
                             "editable": true,
@@ -71,8 +72,8 @@
                             "value": ""
                         },
                         {
-                            "description": "Private key used to authenticate FortiSOAR Server",
                             "title": "Private Key",
+                            "description": "Private key used to authenticate FortiSOAR Server",
                             "tooltip": "Private key used authenticate FortiSOAR Server",
                             "name": "private_key",
                             "type": "password",
@@ -101,7 +102,8 @@
         {
             "operation": "make_api_call",
             "title": "Make an API call",
-            "description": "Makes an API call to the given endpoint with the given method.",
+            "description": "Makes an API call to the endpoint with the given method and payload.",
+            "tooltip": "Makes an API call to the endpoint with the given method and payload.",
             "category": "",
             "annotation": "",
             "output_schema": {
@@ -112,7 +114,8 @@
             "parameters": [
                 {
                     "title": "Endpoint IRI",
-                    "description": "Endpoint IRI",
+                    "description": "FortiSOAR supported RESTful APIs endpoints",
+                    "tooltip": "FortiSOAR supported RESTful APIs endpoints",
                     "type": "text",
                     "name": "iri",
                     "required": true,
@@ -122,7 +125,8 @@
                 {
                     "title": "HTTP method",
                     "name": "method",
-                    "description": "Http method",
+                    "description": "The primary or most-commonly-used HTTP methods some of them are POST, GET, PUT and DELETE. These correspond to create, read, update, and delete (or CRUD) operations, respectively.",
+                    "tooltip": "The primary or most-commonly-used HTTP methods some of them are POST, GET, PUT and DELETE. These correspond to create, read, update, and delete (or CRUD) operations, respectively.",
                     "type": "select",
                     "visible": true,
                     "editable": true,
@@ -138,7 +142,8 @@
                             {
                                 "title": "Query params",
                                 "name": "params",
-                                "description": "Any query params to send as part of the url",
+                                "description": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
+                                "tooltip": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -148,7 +153,8 @@
                             {
                                 "title": "Headers",
                                 "name": "headers",
-                                "description": "An dict full of headers to add to the request",
+                                "description": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
+                                "tooltip": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -160,7 +166,8 @@
                             {
                                 "title": "Query params",
                                 "name": "params",
-                                "description": "Any query params to send as part of the url",
+                                "description": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
+                                "tooltip": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -170,17 +177,18 @@
                             {
                                 "title": "Body",
                                 "name": "body",
-                                "description": "The body (which won't be encoded) to send with the request",
+                                "description": "The request body is used to send and receive data via the REST API",
+                                "tooltip": "The request body is used to send and receive data via the REST API",
                                 "type": "textarea",
                                 "visible": true,
                                 "editable": true,
-                                "required": false,
-                                "tooltip": "Body for POST OR PUT methods"
+                                "required": false
                             },
                             {
                                 "title": "Headers",
                                 "name": "headers",
-                                "description": "An dict full of headers to add to the request",
+                                "description": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
+                                "tooltip": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -192,7 +200,8 @@
                             {
                                 "title": "Query params",
                                 "name": "params",
-                                "description": "Any query params to send as part of the url",
+                                "description": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
+                                "tooltip": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -202,17 +211,18 @@
                             {
                                 "title": "Body",
                                 "name": "body",
-                                "description": "The body (which won't be encoded) to send with the request",
+                                "description": "The request body is used to send and receive data via the REST API",
+                                "tooltip": "The request body is used to send and receive data via the REST API",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
-                                "required": false,
-                                "tooltip": "Body for POST OR PUT methods"
+                                "required": false
                             },
                             {
                                 "title": "Headers",
                                 "name": "headers",
-                                "description": "An dict full of headers to add to the request",
+                                "description": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
+                                "tooltip": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -224,7 +234,8 @@
                             {
                                 "title": "Query params",
                                 "name": "params",
-                                "description": "Any query params to send as part of the url",
+                                "description": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
+                                "tooltip": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -234,7 +245,8 @@
                             {
                                 "title": "Headers",
                                 "name": "headers",
-                                "description": "An dict full of headers to add to the request",
+                                "description": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
+                                "tooltip": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
