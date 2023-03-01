@@ -4,8 +4,8 @@
     "label": "Remote FortiSOAR",
     "description": "This connector allows you to run REST API operations on other FortiSOAR environments",
     "publisher": "Fortinet",
-    "icon_small_name": "fortisoar_remote_small.png",
-    "icon_large_name": "fortisoar_remote_large.png",
+    "icon_small_name": "remote-fortisoar_small.png",
+    "icon_large_name": "remote-fortisoar_large.png",
     "cs_approved": true,
     "category": "Utilities",
     "help_online": "",
@@ -13,6 +13,7 @@
         "fields": [
             {
                 "title": "FortiSOAR Endpoint URL",
+                "description": "FortiSOAR Endpoint URL",
                 "type": "text",
                 "name": "url",
                 "required": true,
@@ -85,11 +86,14 @@
             },
             {
                 "title": "Verify SSL",
+                "description": "Specifies whether the SSL certificate for the server is to be verified or not. Defaults to False.",
+                "tooltip": "Specifies whether the SSL certificate for the server is to be verified or not. Defaults to False.",
                 "type": "checkbox",
                 "name": "verify_ssl",
                 "required": false,
                 "visible": true,
-                "editable": true
+                "editable": true,
+                "value": false
             }
         ]
     },
@@ -108,6 +112,7 @@
             "parameters": [
                 {
                     "title": "Endpoint IRI",
+                    "description": "Endpoint IRI",
                     "type": "text",
                     "name": "iri",
                     "required": true,
