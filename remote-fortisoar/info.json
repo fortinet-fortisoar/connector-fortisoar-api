@@ -1,5 +1,5 @@
 {
-    "name": "remoteFortisoar",
+    "name": "remote-fortisoar",
     "version": "1.0.0",
     "label": "Remote FortiSOAR",
     "description": "This connector allows you to run REST API operations on other FortiSOAR environments",
