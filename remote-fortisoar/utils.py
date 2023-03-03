@@ -12,7 +12,19 @@ logger = get_logger(LOGGER_NAME)
 def login(config):
     auth_type = config.get('auth_type')
     if auth_type == 'Basic':
-        return _login_using_basic_auth(config)
+        try:
+            return _login_using_basic_auth(config)
+        except requests.exceptions.HTTPError as e:
+            # In case of HTTPError, we want to show only specific error
+            # string in an UI and remove all other noise
+            error_obj = json.loads(str(e).split("::", 1)[1].replace("'" , '"'))
+            for key, value in error_obj.items():
+                error_message = "{}: {}".format(key, value)
+                raise Exception(error_message)
+        except Exception as e:
+            logger.error("Basic auth login error: " + str(e))
+            error_message = "Error: Invalid endpoint or invalid credentials. For more details please check connector.log"
+            raise e(error_message)
     else:
         return _login_using_hmac_auth(config)
     
