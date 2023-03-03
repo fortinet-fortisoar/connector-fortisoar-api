@@ -2,19 +2,20 @@
     "name": "remote-fortisoar",
     "version": "1.0.0",
     "label": "Remote FortiSOAR",
-    "description": "This connector allows you to run REST API operations on other FortiSOAR environments",
+    "description": "This connector facilitates automated interactions, with a FortiSOAR endpoint using FortiSOAR playbooks. Add the Remote FortiSOAR connector as a step in FortiSOAR playbooks and run REST API operations on FortiSOAR environments other than your own FortiSOAR environment",
     "publisher": "Fortinet",
     "icon_small_name": "remote-fortisoar_small.png",
     "icon_large_name": "remote-fortisoar_large.png",
     "cs_approved": true,
     "cs_compatible": true,
     "category": "Utilities",
-    "help_online": "",
+    "help_online": "https://docs.fortinet.com/document/fortisoar/1.0.0/remote-fortisoar/517/remote-fortisoar-v1-0-0",
     "configuration": {
         "fields": [
             {
                 "title": "FortiSOAR Endpoint URL",
-                "description": "FortiSOAR Endpoint URL",
+                "description": "Specify the URL of the FortiSOAR server to which you will connect and perform automated operations",
+                "tooltip": "Specify the URL of the FortiSOAR server to which you will connect and perform automated operations",
                 "type": "text",
                 "name": "url",
                 "required": true,
@@ -24,8 +25,8 @@
             {
                 "title": "Authentication Type",
                 "name": "auth_type",
-                "description": "Authentication that will be used to connect and communicate with the FortiSOAR server. Choose either Basic or HMAC. By default, this is set to Basic.",
-                "tooltip": "Authentication that will be used to connect and communicate with the FortiSOAR server. Choose either Basic or HMAC. By default, this is set to Basic.",
+                "description": "Select the type of authentication that will be used to connect and communicate with the remote FortiSOAR server. You can choose between Basic (default) or HMAC",
+                "tooltip": "Select the type of authentication that will be used to connect and communicate with the remote FortiSOAR server. You can choose between Basic (default) or HMAC",
                 "required": true,
                 "editable": true,
                 "visible": true,
@@ -39,8 +40,8 @@
                     "Basic": [
                         {
                             "title": "User Name",
-                            "description": "User name used to authenticate Remote FortiSOAR Server",
-                            "tooltip": "User name used to authenticate Remote FortiSOAR Server",
+                            "description": "Specify the username to access the remote FortiSOAR server to which you will connect and perform automated operations",
+                            "tooltip": "Specify the username to access the remote FortiSOAR server to which you will connect and perform automated operations",
                             "name": "username",
                             "type": "text",
                             "visible": true,
@@ -50,8 +51,8 @@
                         },
                         {
                             "title": "Password",
-                            "description": "Password used to authenticate FortiSOAR Server",
-                            "tooltip": "Password used to authenticate FortiSOAR Server",
+                            "description": "Specify the password to access the remote FortiSOAR server to which you will connect and perform automated operations",
+                            "tooltip": "Specify the password to access the remote FortiSOAR server to which you will connect and perform automated operations",
                             "required": true,
                             "editable": true,
                             "visible": true,
@@ -63,8 +64,8 @@
                     "HMAC": [
                         {
                             "title": "Public Key",
-                            "description": "Public key used to authenticate FortiSOAR Server",
-                            "tooltip": "Public key used to authenticate FortiSOAR Server",
+                            "description": "Specify the public key that is used to access the remote FortiSOAR server to which you will connect and perform automated operations",
+                            "tooltip": "Specify the public key that is used to access the remote FortiSOAR server to which you will connect and perform automated operations",
                             "required": true,
                             "editable": true,
                             "visible": true,
@@ -74,8 +75,8 @@
                         },
                         {
                             "title": "Private Key",
-                            "description": "Private key used to authenticate FortiSOAR Server",
-                            "tooltip": "Private key used authenticate FortiSOAR Server",
+                            "description": "Specify the private key that is used to access the remote FortiSOAR server to which you will connect and perform automated operations",
+                            "tooltip": "Specify the private key that is used to access the remote FortiSOAR server to which you will connect and perform automated operations",
                             "name": "private_key",
                             "type": "password",
                             "visible": true,
@@ -103,20 +104,19 @@
         {
             "operation": "make_api_call",
             "title": "Make an API call",
-            "description": "Makes an API call to the endpoint with the given method and payload.",
-            "tooltip": "Makes an API call to the endpoint with the given method and payload.",
-            "category": "",
-            "annotation": "",
+            "description": "Makes an API call to the FortiSOAR remote endpoint using the specified method and payload",
+            "tooltip": "Makes an API call to the FortiSOAR remote endpoint using the specified method and payload",
+            "category": "investigation",
+            "annotation": "make_api_call",
             "output_schema": {
-                "result": "",
-                "api_data": ""
+                "data": ""
             },
             "enabled": true,
             "parameters": [
                 {
                     "title": "Endpoint IRI",
-                    "description": "FortiSOAR supported RESTful APIs endpoints",
-                    "tooltip": "FortiSOAR supported RESTful APIs endpoints",
+                    "description": "Specify the IRI of FortiSOAR-supported RESTful APIs endpoints using which you want to make the API call to the remote FortiSOAR server. For example /api/3/alerts",
+                    "tooltip": "Specify the IRI of FortiSOAR-supported RESTful APIs endpoints using which you want to make the API call to the remote FortiSOAR server. For example /api/3/alerts",
                     "type": "text",
                     "name": "iri",
                     "required": true,
@@ -126,8 +126,8 @@
                 {
                     "title": "HTTP method",
                     "name": "method",
-                    "description": "The primary or most-commonly-used HTTP methods some of them are POST, GET, PUT and DELETE. These correspond to create, read, update, and delete (or CRUD) operations, respectively.",
-                    "tooltip": "The primary or most-commonly-used HTTP methods some of them are POST, GET, PUT and DELETE. These correspond to create, read, update, and delete (or CRUD) operations, respectively.",
+                    "description": "Select the HTTP method using which you want to make the API call to the remote FortiSOAR server. You can choose from the following commonly-used HTTP method: POST, GET, PUT, and DELETE. These HTTP methods correspond to create, read, update, and delete (or CRUD) operations, respectively",
+                    "tooltip": "Select the HTTP method using which you want to make the API call to the remote FortiSOAR server. You can choose from the following commonly-used HTTP method: POST, GET, PUT, and DELETE. These HTTP methods correspond to create, read, update, and delete (or CRUD) operations, respectively",
                     "type": "select",
                     "visible": true,
                     "editable": true,
@@ -143,8 +143,8 @@
                             {
                                 "title": "Query params",
                                 "name": "params",
-                                "description": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
-                                "tooltip": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
+                                "description": "Specify the API Query parameters using which you want to make the API call to the remote FortiSOAR server. API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
+                                "tooltip": "Specify the API Query parameters using which you want to make the API call to the remote FortiSOAR server. API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -154,8 +154,8 @@
                             {
                                 "title": "Headers",
                                 "name": "headers",
-                                "description": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
-                                "tooltip": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
+                                "description": "Specify the Header associated with the API call you want to make to the remote FortiSOAR server. HTTP Headers are an important part of the API request and response as they represent the metadata associated with the API request and response",
+                                "tooltip": "Specify the Header associated with the API call you want to make to the remote FortiSOAR server. HTTP Headers are an important part of the API request and response as they represent the metadata associated with the API request and response",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -167,8 +167,8 @@
                             {
                                 "title": "Query params",
                                 "name": "params",
-                                "description": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
-                                "tooltip": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
+                                "description": "Specify the API Query parameters using which you want to make the API call to the remote FortiSOAR server. API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
+                                "tooltip": "Specify the API Query parameters using which you want to make the API call to the remote FortiSOAR server. API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -178,8 +178,8 @@
                             {
                                 "title": "Body",
                                 "name": "body",
-                                "description": "The request body is used to send and receive data via the REST API",
-                                "tooltip": "The request body is used to send and receive data via the REST API",
+                                "description": "Specify the request body that is to be used to send and receive data from the remote FortiSOAR server using the REST API",
+                                "tooltip": "Specify the request body that is to be used to send and receive data from the remote FortiSOAR server using the REST API",
                                 "type": "textarea",
                                 "visible": true,
                                 "editable": true,
@@ -188,8 +188,8 @@
                             {
                                 "title": "Headers",
                                 "name": "headers",
-                                "description": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
-                                "tooltip": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
+                                "description": "Specify the Header associated with the API call you want to make to the remote FortiSOAR server. HTTP Headers are an important part of the API request and response as they represent the metadata associated with the API request and response",
+                                "tooltip": "Specify the Header associated with the API call you want to make to the remote FortiSOAR server. HTTP Headers are an important part of the API request and response as they represent the metadata associated with the API request and response",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -201,8 +201,8 @@
                             {
                                 "title": "Query params",
                                 "name": "params",
-                                "description": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
-                                "tooltip": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
+                                "description": "Specify the API Query parameters using which you want to make the API call to the remote FortiSOAR server. API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
+                                "tooltip": "Specify the API Query parameters using which you want to make the API call to the remote FortiSOAR server. API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -212,8 +212,8 @@
                             {
                                 "title": "Body",
                                 "name": "body",
-                                "description": "The request body is used to send and receive data via the REST API",
-                                "tooltip": "The request body is used to send and receive data via the REST API",
+                                "description": "Specify the request body that is to be used to send and receive data from the remote FortiSOAR server using the REST API",
+                                "tooltip": "Specify the request body that is to be used to send and receive data from the remote FortiSOAR server using the REST API",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -222,8 +222,8 @@
                             {
                                 "title": "Headers",
                                 "name": "headers",
-                                "description": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
-                                "tooltip": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
+                                "description": "Specify the Header associated with the API call you want to make to the remote FortiSOAR server. HTTP Headers are an important part of the API request and response as they represent the metadata associated with the API request and response",
+                                "tooltip": "Specify the Header associated with the API call you want to make to the remote FortiSOAR server. HTTP Headers are an important part of the API request and response as they represent the metadata associated with the API request and response",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -235,8 +235,8 @@
                             {
                                 "title": "Query params",
                                 "name": "params",
-                                "description": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
-                                "tooltip": "API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
+                                "description": "Specify the API Query parameters using which you want to make the API call to the remote FortiSOAR server. API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
+                                "tooltip": "Specify the API Query parameters using which you want to make the API call to the remote FortiSOAR server. API Query parameters can be defined as the optional key-value pairs that appear after the question mark in the URL. Basically, they are extensions of the URL that are utilized to help determine specific content or action based on the data being delivered",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
@@ -246,8 +246,8 @@
                             {
                                 "title": "Headers",
                                 "name": "headers",
-                                "description": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
-                                "tooltip": "HTTP Headers are an important part of the API request and response as they represent the meta-data associated with the API request and response",
+                                "description": "Specify the Header associated with the API call you want to make to the remote FortiSOAR server. HTTP Headers are an important part of the API request and response as they represent the metadata associated with the API request and response",
+                                "tooltip": "Specify the Header associated with the API call you want to make to the remote FortiSOAR server. HTTP Headers are an important part of the API request and response as they represent the metadata associated with the API request and response",
                                 "type": "text",
                                 "visible": true,
                                 "editable": true,
