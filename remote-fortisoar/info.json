@@ -109,7 +109,6 @@
             "category": "investigation",
             "annotation": "make_api_call",
             "output_schema": {
-                "data": ""
             },
             "enabled": true,
             "parameters": [
