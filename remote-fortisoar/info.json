@@ -33,6 +33,7 @@
                 "type": "select",
                 "options": [
                     "Basic",
+                    "API-Key",
                     "HMAC"
                 ],
                 "value": "Basic",
@@ -61,6 +62,19 @@
                             "value": ""
                         }
                     ],
+                    "API-Key": [
+                        {
+                            "title": "API Key",
+                            "description": "Specify API Key to access the remote FortiSOAR server to which you will connect and perform automated operations",
+                            "tooltip": "Specify API Key to access the remote FortiSOAR server to which you will connect and perform automated operations",
+                            "required": true,
+                            "editable": true,
+                            "visible": true,
+                            "type": "password",
+                            "name": "apikey",
+                            "value": ""
+                        }
+                    ],                    
                     "HMAC": [
                         {
                             "title": "Public Key",
