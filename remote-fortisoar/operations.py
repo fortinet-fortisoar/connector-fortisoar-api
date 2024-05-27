@@ -1,3 +1,10 @@
+"""
+Copyright start
+MIT License
+Copyright (c) 2024 Fortinet Inc
+Copyright end
+"""
+
 from connectors.core.connector import get_logger, ConnectorError
 import json
 from .utils import invoke_rest_endpoint
