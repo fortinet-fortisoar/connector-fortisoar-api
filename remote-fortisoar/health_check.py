@@ -1,3 +1,10 @@
+"""
+Copyright start
+MIT License
+Copyright (c) 2024 Fortinet Inc
+Copyright end
+"""
+
 from .utils import login
 from connectors.core.connector import get_logger, ConnectorError
 from .constants import LOGGER_NAME
