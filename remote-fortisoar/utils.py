@@ -2,34 +2,14 @@ import requests
 import json
 from urllib.parse import urlencode
 import urllib.parse as urlparse
+from requests_toolbelt.utils import dump
+import logging
 from cshmac.requests import HmacAuth
 from connectors.core.connector import get_logger, ConnectorError
 from .constants import LOGGER_NAME
 
 logger = get_logger(LOGGER_NAME)
-
-
-def login(config):
-    auth_type = config.get('auth_type')
-    if auth_type == 'Basic':
-        try:
-            return _login_using_basic_auth(config)
-        except requests.exceptions.HTTPError as e:
-            # In case of HTTPError, we want to show only specific error
-            # string in an UI and remove all other noise
-            error_message = str(e)
-            if "::" in str(e):
-                # :: is a error message separator used
-                error_obj = json.loads(str(e).split("::", 1)[1].replace("'" , '"'))
-                for key, value in error_obj.items():
-                    error_message = "{}: {}".format(key, value)
-            raise Exception(error_message)
-        except Exception as e:
-            logger.error("Basic auth login error: " + str(e))
-            error_message = "Error: Invalid endpoint or invalid credentials. For more details please check connector.log"
-            raise e(error_message)
-    else:
-        return _login_using_hmac_auth(config)
+#logger.setLevel(logging.DEBUG)
     
 def invoke_rest_endpoint(config, endpoint, method='GET', headers=None, body=None, params=None):
     server_address = _get_server_address(config)
@@ -39,7 +19,7 @@ def invoke_rest_endpoint(config, endpoint, method='GET', headers=None, body=None
     verify_ssl = config.get('verify_ssl', False)
     auth = None
 
-    if len(headers) == 0:
+    if not headers or len(headers) == 0:
         headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
 
     # Manupulate query pramas, url encode them and make it a part of an url
@@ -56,6 +36,11 @@ def invoke_rest_endpoint(config, endpoint, method='GET', headers=None, body=None
         return _make_request(url=url, method=method, 
                              body=body, headers=headers, 
                              verify=verify_ssl, auth=auth)
+    elif (auth_type == 'API-Key'):
+        headers["Authorization"] = "API-KEY " + config.get('apikey')
+        return _make_request(url=url, method=method, 
+                             body=body, headers=headers, 
+                             verify=verify_ssl, auth=auth) 
     elif (auth_type == 'HMAC'):
         auth = _generate_hmac(config, url, method, body)
         return _make_request(url=url, method=method, 
@@ -125,6 +110,7 @@ def _make_request(url, method='GET', params=None, body=None, headers=None,
     logger.info('Starting request: Method: %s, Url: %s', method, url)
     try:
         response = requests.request(method, url, auth=auth, **request_args)
+        logger.debug("\n\{}n".format(dump.dump_all(response).decode('utf-8')))
     except requests.exceptions.SSLError as e:
         logger.exception("ERROR :: {0}".format(str(e)))
         raise ConnectorError("ERROR :: {0}".format(str(e)))
@@ -179,6 +165,31 @@ def _maybe_json_or_raise(response):
                 error_msg = '{} :: {}'.format(str(e), msg)
             logger.error(error_msg)
             raise requests.exceptions.HTTPError(error_msg, response=response)
+        
+
+def login(config):
+    auth_type = config.get('auth_type')
+    if auth_type == 'Basic':
+        try:
+            return _login_using_basic_auth(config)
+        except requests.exceptions.HTTPError as e:
+            # In case of HTTPError, we want to show only specific error
+            # string in an UI and remove all other noise
+            error_message = str(e)
+            if "::" in str(e):
+                # :: is a error message separator used
+                error_obj = json.loads(str(e).split("::", 1)[1].replace("'" , '"'))
+                for key, value in error_obj.items():
+                    error_message = "{}: {}".format(key, value)
+            raise Exception(error_message)
+        except Exception as e:
+            logger.error("Basic auth login error: " + str(e))
+            error_message = "Error: Invalid endpoint or invalid credentials. For more details please check connector.log"
+            raise e(error_message)
+    elif auth_type == 'HMAC':
+        return _login_using_hmac_auth(config)
+    elif auth_type == 'API-Key':
+        return invoke_rest_endpoint(config, '/api/3/template/dashboard/default?$asJson=true', 'GET')
 
 def _getErrorMessage(msg):
     if type(msg) == dict:
