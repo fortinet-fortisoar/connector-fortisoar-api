@@ -1,6 +1,6 @@
 {
     "name": "remote-fortisoar",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "label": "Remote FortiSOAR",
     "description": "This connector facilitates automated interactions, with a FortiSOAR endpoint using FortiSOAR playbooks. Add the Remote FortiSOAR connector as a step in FortiSOAR playbooks and run REST API operations on FortiSOAR environments other than your own FortiSOAR environment",
     "publisher": "Fortinet",
@@ -9,7 +9,7 @@
     "cs_approved": true,
     "cs_compatible": true,
     "category": "Utilities",
-    "help_online": "https://docs.fortinet.com/document/fortisoar/1.0.0/remote-fortisoar/517/remote-fortisoar-v1-0-0",
+    "help_online": "",
     "configuration": {
         "fields": [
             {
