@@ -4,7 +4,7 @@
     {
       "uuid": "c34830bf-149d-42bd-97c8-de42d77018fa",
       "@type": "WorkflowCollection",
-      "name": "Sample - Remote FortiSOAR - 1.0.0",
+      "name": "Sample - Remote FortiSOAR - 2.0.0",
       "description": "This connector allows you to run REST API operations on other FortiSOAR environments",
       "visible": true,
       "image": null,
@@ -87,7 +87,7 @@
                   "params": "",
                   "headers": "{\"accept\": \"application/json\"}"
                 },
-                "version": "1.0.0",
+                "version": "2.0.0",
                 "connector": "remote-fortisoar",
                 "operation": "make_api_call",
                 "operationTitle": "Make an API call",
