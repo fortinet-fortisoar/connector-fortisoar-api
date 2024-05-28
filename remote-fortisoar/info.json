@@ -25,8 +25,8 @@
             {
                 "title": "Authentication Type",
                 "name": "auth_type",
-                "description": "Select the type of authentication that will be used to connect and communicate with the remote FortiSOAR server. You can choose between Basic (default) or HMAC",
-                "tooltip": "Select the type of authentication that will be used to connect and communicate with the remote FortiSOAR server. You can choose between Basic (default) or HMAC",
+                "description": "Select the type of authentication that will be used to connect and communicate with the remote FortiSOAR server. You can choose between Basic (default), HMAC or API-Key",
+                "tooltip": "Select the type of authentication that will be used to connect and communicate with the remote FortiSOAR server. You can choose between Basic (default), HMAC or API-Key",
                 "required": true,
                 "editable": true,
                 "visible": true,
