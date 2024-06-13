@@ -62,7 +62,7 @@ def invoke_rest_endpoint(config, endpoint, method='GET', headers=None, body=None
         raise ConnectorError('Invalid authentication type: {0}'.format(auth_type))
 
 
-def upload_file_remote(config, file_obj, metadata):
+def upload_file_remote(config, file_obj, metadata, create_attachment):
     multipart_headers = {}
     request_headers = {}
 
@@ -86,6 +86,11 @@ def upload_file_remote(config, file_obj, metadata):
         'Content-Type': encoder.content_type
     })
     endpoint = '/api/3/files'
+    if create_attachment:
+        response = invoke_rest_endpoint(config, endpoint, method='POST', headers=request_headers, data=encoder)
+        file_id = response['@id']
+        file_description = real_filename
+        return invoke_rest_endpoint(config, '/api/3/attachments', method='POST', body={'name': real_filename, 'file': file_id, 'description': file_description})
     return invoke_rest_endpoint(config, endpoint, method='POST', headers=request_headers, data=encoder)
 
 
