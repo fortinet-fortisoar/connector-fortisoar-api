@@ -32,6 +32,7 @@ def make_api_call(config, params, *args, **kwargs):
 
 def upload_file(config, params, *args, **kwargs):
     file_iri = params.get('file_iri')
+    create_attachment = params.get('create_attachment')
     if not file_iri:
         logger.warning('Got file_iri: {file_iri}'.format(endpoint=file_iri))
         raise ConnectorError('Missing required input')
@@ -40,5 +41,5 @@ def upload_file(config, params, *args, **kwargs):
     file_name = dw_file_md.get('filename')
     logger.info('file_name = {0}'.format(file_name))
     file_path = os.path.join(settings.TMP_FILE_ROOT, tmp_file_path)
-    api_response = upload_file_remote(config, open(file_path, 'rb'), dw_file_md)
+    api_response = upload_file_remote(config, open(file_path, 'rb'), dw_file_md, create_attachment)
     return api_response

@@ -295,6 +295,17 @@
           "editable": true,
           "description": "Specify the Attachment/File IRI of the file to upload.",
           "tooltip": "Specify the Attachment/File IRI of the file to upload."
+        },
+        {
+          "title": "Create Attachment",
+          "required": false,
+          "editable": true,
+          "visible": true,
+          "type": "checkbox",
+          "name": "create_attachment",
+          "value": false,
+          "tooltip": "Select this option, i.e., set it to True to create attachment of the file in FortiSOAR. Clear this option, i.e., set it to False (default) to create file only.",
+          "description": "Select this option, i.e., set it to True to create attachment of the file in FortiSOAR. Clear this option, i.e., set it to False (default) to create file only."
         }
       ],
       "open": false
