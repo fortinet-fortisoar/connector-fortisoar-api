@@ -138,6 +138,83 @@
           "recordTags": [
             "Remotefortisoar"
           ]
+        },
+        {
+          "@type": "Workflow",
+          "uuid": "cb7b35b5-9602-4171-af06-93c006e7f2f5",
+          "collection": "/api/3/workflow_collections/d966f60a-06f9-40eb-b945-088b8a373150",
+          "triggerLimit": null,
+          "description": "Makes a file upload request based on the provided attachment/file IRI",
+          "name": "Upload file to FortiSOAR",
+          "tag": "#Remote FortiSOAR",
+          "recordTags": [
+            "Remote",
+            "remote-fortisoar"
+          ],
+          "isActive": false,
+          "debug": false,
+          "singleRecordExecution": false,
+          "parameters": [],
+          "synchronous": false,
+          "triggerStep": "/api/3/workflow_steps/878657b8-f6e1-4104-9526-0a52f2b1200d",
+          "steps": [
+            {
+              "uuid": "878657b8-f6e1-4104-9526-0a52f2b1200d",
+              "@type": "WorkflowStep",
+              "name": "Start",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "route": "e83a3511-241f-4854-9426-860365ecc496",
+                "title": "Remote FortiSOAR: Upload file to FortiSOAR",
+                "resources": [
+                  "alerts"
+                ],
+                "inputVariables": [],
+                "step_variables": {
+                  "input": {
+                    "records": "{{vars.input.records[0]}}"
+                  }
+                },
+                "singleRecordExecution": false,
+                "noRecordExecution": true,
+                "executeButtonText": "Execute"
+              },
+              "left": "20",
+              "top": "20",
+              "stepType": "/api/3/workflow_step_types/f414d039-bb0d-4e59-9c39-a8f1e880b18a"
+            },
+            {
+              "uuid": "d04d8dd9-8808-41df-a557-e70d191a2035",
+              "@type": "WorkflowStep",
+              "name": "Upload file to FortiSOAR",
+              "description": null,
+              "status": null,
+              "arguments": {
+                "name": "Remote FortiSOAR",
+                "config": "''",
+                "params": [],
+                "version": "2.0.0",
+                "connector": "remote-fortisoar",
+                "operation": "upload_file",
+                "operationTitle": "Upload file to FortiSOAR"
+              },
+              "left": "188",
+              "top": "120",
+              "stepType": "/api/3/workflow_step_types/0bfed618-0316-11e7-93ae-92361f002671"
+            }
+          ],
+          "routes": [
+            {
+              "@type": "WorkflowRoute",
+              "uuid": "595e6ef8-4fc7-488a-a5a4-c18520ed783e",
+              "label": null,
+              "isExecuted": false,
+              "name": "Start-> Upload file to FortiSOAR",
+              "sourceStep": "/api/3/workflow_steps/878657b8-f6e1-4104-9526-0a52f2b1200d",
+              "targetStep": "/api/3/workflow_steps/d04d8dd9-8808-41df-a557-e70d191a2035"
+            }
+          ]
         }
       ]
     }
