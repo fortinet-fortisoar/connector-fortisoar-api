@@ -229,8 +229,7 @@ def login(config):
             raise Exception(error_message)
         except Exception as e:
             logger.error("Basic auth login error: " + str(e))
-            error_message = "Error: Invalid endpoint or invalid credentials. For more details please check connector.log"
-            raise e(error_message)
+            raise ConnectorError(e)
     elif auth_type == 'HMAC':
         return _login_using_hmac_auth(config)
     elif auth_type == 'API-Key':

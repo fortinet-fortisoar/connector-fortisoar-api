@@ -305,7 +305,7 @@
           "name": "create_attachment",
           "value": false,
           "tooltip": "Select this option, i.e., set it to True to create attachment of the file in remote FortiSOAR. Clear this option, i.e., set it to False (default) to create file only.",
-          "description": "Select this option, i.e., set it to True to create attachment of the file in remotre FortiSOAR. Clear this option, i.e., set it to False (default) to create file only."
+          "description": "Select this option, i.e., set it to True to create attachment of the file in remote FortiSOAR. Clear this option, i.e., set it to False (default) to create file only."
         }
       ],
       "open": false
