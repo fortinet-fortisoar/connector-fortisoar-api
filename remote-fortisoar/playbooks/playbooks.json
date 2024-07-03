@@ -9,7 +9,7 @@
       "visible": true,
       "image": null,
       "recordTags": [
-        "Remotefortisoar"
+        "remote-fortisoar"
       ],
       "workflows": [
         {
@@ -136,7 +136,7 @@
           "deletedAt": null,
           "importedBy": [],
           "recordTags": [
-            "Remotefortisoar"
+            "remote-fortisoar"
           ]
         },
         {
@@ -148,7 +148,6 @@
           "name": "Upload file to FortiSOAR",
           "tag": "#Remote FortiSOAR",
           "recordTags": [
-            "Remote",
             "remote-fortisoar"
           ],
           "isActive": false,

@@ -9,7 +9,7 @@
   "cs_approved": true,
   "cs_compatible": true,
   "category": "Utilities",
-  "help_online": "",
+  "help_online": "https://docs.fortinet.com/document/fortisoar/2.0.0/remote-fortisoar/892/remote-fortisoar-v2-0-0",
   "configuration": {
     "fields": [
       {
