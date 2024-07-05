@@ -4,7 +4,7 @@
   "label": "Remote FortiSOAR",
   "description": "This connector facilitates automated interactions, with a FortiSOAR endpoint using FortiSOAR playbooks. Add the Remote FortiSOAR connector as a step in FortiSOAR playbooks and run REST API operations on FortiSOAR environments other than your own FortiSOAR environment",
   "publisher": "Fortinet",
-  "contributor": "Priyank Srivastava, Mahdi Naili",
+  "contributor": "Priyank Mankad, Mahdi Naili",
   "icon_small_name": "remote-fortisoar_small.png",
   "icon_large_name": "remote-fortisoar_large.png",
   "cs_approved": true,
